@@ -11,11 +11,17 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 const server = require('http').createServer(app);
-const io = require('socket.io')(server, {
-  cors: {
-    origin: 'http://localhost:3000',
-  },
-});
+
+let io = null;
+if (process.env.NODE_ENV === 'production') {
+  io = require('socket.io')(server);
+} else {
+  io = require('socket.io')(server, {
+    cors: {
+      origin: 'http://localhost:3000',
+    },
+  });
+}
 
 // Connect to DB
 connectDB();
