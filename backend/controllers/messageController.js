@@ -1,15 +1,11 @@
 module.exports = (io, onlineUsers) => {
   const Message = require('../models/messageModel');
   return (socket) => {
-    console.log(
-      `New connection ${socket.id} number of connections: ${io.engine.clientsCount}, token: ${socket.handshake.query.myToken}`
-    );
     onlineUsers.set(socket.user._id.toString(), socket.user);
     io.emit(
       'online-users',
       [...onlineUsers].map(([name, value]) => value)
     );
-    console.log('connecting...', onlineUsers);
 
     // @desc    Get messages from current time
     // @socket  ON "get-messages" event from client
@@ -126,28 +122,20 @@ module.exports = (io, onlineUsers) => {
     });
     socket.on('disconnect', () => {
       socket.disconnect();
-      console.log(
-        `Connection ${socket.id} has left, number of connections: ${io.engine.clientsCount}`
-      );
       onlineUsers.delete(socket.user._id.toString());
       io.emit(
         'online-users',
         [...onlineUsers].map(([name, value]) => value)
       );
-      console.log('disconnecting...', onlineUsers);
     });
     socket.on('force-disconnect', () => {
       socket.disconnect();
       // onlineUsers.delete(socket.user._id);
-      console.log(
-        `Connection has left, number of connections: ${io.engine.clientsCount}`
-      );
       onlineUsers.delete(socket.user._id.toString());
       io.emit(
         'online-users',
         [...onlineUsers].map(([name, value]) => value)
       );
-      console.log('disconnecting...', onlineUsers);
     });
   };
 };

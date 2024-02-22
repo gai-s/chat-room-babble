@@ -34,7 +34,6 @@ function ChatList() {
   useEffect(() => {
     if (socket.current === null && user && user.token) {
       // Connect to the server
-      console.log(socket);
       socket.current = socketClient(user.token);
       // Get messages
       dispatch(asyncGetMessages(socket.current));
@@ -55,7 +54,6 @@ function ChatList() {
         dispatch(socketUpdateMessage(message));
       });
       socket.current.on('online-users', (users) => {
-        console.log('online users are: ', users);
         dispatch(socketGetOnlineUsers(users));
       });
       // Listen for errors
@@ -74,7 +72,6 @@ function ChatList() {
     }
     return () => {
       if (socket.current) {
-        console.log('exit chat list page');
         socket.current.disconnect(); // Disconnect from the server
         socket.current = null;
       }

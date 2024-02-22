@@ -96,9 +96,7 @@ function ChatItem({ socket, message }) {
             </button>
           </div>
         )}
-        <h1>
-          {users && users.filter((user) => user.id === message.user)[0]?.name}{' '}
-        </h1>
+        <h3>{message.userName}</h3>
         <p className='time'>
           {new Date(message.createdAt).toLocaleTimeString()}
         </p>

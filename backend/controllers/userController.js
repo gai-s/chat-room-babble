@@ -17,7 +17,6 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('Please include all fields');
   }
   const userExist = await User.findOne({ email });
-  console.log(userExist);
 
   if (userExist) {
     res.status(400);
