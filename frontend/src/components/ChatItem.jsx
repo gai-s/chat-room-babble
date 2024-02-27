@@ -11,6 +11,7 @@ import {
   FaPen,
   FaTrash,
 } from 'react-icons/fa';
+import moment from 'moment';
 
 function ChatItem({ socket, message }) {
   const dispatch = useDispatch();
@@ -71,6 +72,14 @@ function ChatItem({ socket, message }) {
     }
   };
 
+  const calculateTime = (timeString) => {
+    let time = moment(timeString);
+    if (moment().diff(time, 'minute') > 60) {
+      return time.format('MMM D, h:mm a');
+    }
+    return time.fromNow();
+  };
+
   return (
     <div className={`list-item-container ${userType}`}>
       <div
@@ -97,9 +106,7 @@ function ChatItem({ socket, message }) {
           </div>
         )}
         <h3>{message.userName}</h3>
-        <p className='time'>
-          {new Date(message.createdAt).toLocaleTimeString()}
-        </p>
+        <p className='time'>{calculateTime(message.createdAt)}</p>
         {editMode ? (
           <div className='edit-mode'>
             <div className='form-group list-item-edit-input'>
@@ -121,11 +128,11 @@ function ChatItem({ socket, message }) {
                 <FaCheckCircle />
               </button>
             </div>
-            <div className='form-group list-item-edit-buttons'>
+            {/* <div className='form-group list-item-edit-buttons'>
               <button className='btn' onClick={() => setEditMode(false)}>
                 <FaArrowAltCircleLeft />
               </button>
-            </div>
+            </div> */}
           </div>
         ) : (
           <div className='form-group'>
