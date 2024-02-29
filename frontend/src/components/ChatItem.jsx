@@ -5,12 +5,7 @@ import {
   asyncUpdateMessage,
 } from '../features/Messages/MessagesSlice';
 import { toast } from 'react-toastify';
-import {
-  FaArrowAltCircleLeft,
-  FaCheckCircle,
-  FaPen,
-  FaTrash,
-} from 'react-icons/fa';
+import { FaCheckCircle, FaExclamation, FaPen, FaTrash } from 'react-icons/fa';
 import moment from 'moment';
 
 function ChatItem({ socket, message }) {
@@ -136,7 +131,14 @@ function ChatItem({ socket, message }) {
           </div>
         ) : (
           <div className='form-group'>
-            <p style={{ whiteSpace: 'pre-line' }}>{message.content}</p>
+            <p style={{ whiteSpace: 'pre-line' }}>
+              {message.content}{' '}
+              {message?.edited && (
+                <span className='edited-icon'>
+                  <FaExclamation color='red' />
+                </span>
+              )}
+            </p>
           </div>
         )}
       </div>

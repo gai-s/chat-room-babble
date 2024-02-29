@@ -79,7 +79,7 @@ module.exports = (io, onlineUsers) => {
       if (message.user.toString() !== socket.user.id) {
         socket.emit('errorEvent', new Error('Not Autorized'));
       }
-
+      data.edited = true;
       const updated = await Message.findByIdAndUpdate(id, data, {
         new: true,
       });

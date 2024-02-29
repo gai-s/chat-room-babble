@@ -20,6 +20,10 @@ const messageSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add message content'],
     },
+    edited: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
