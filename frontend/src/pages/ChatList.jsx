@@ -6,11 +6,14 @@ import ChatItem from '../components/ChatItem';
 import {
   unsetIsLoading,
   asyncCreateMessage,
+  asyncSendFeedback,
   socketGetMessages,
   socketGetMessage,
   socketUpdateMessage,
   socketDeleteMessage,
   asyncGetMessages,
+  socketGetFeedback,
+  clearFeedback,
 } from '../features/Messages/MessagesSlice';
 import { socketGetOnlineUsers } from '../features/OnlineUsers/OnlineUsersSlice';
 import { FaUser } from 'react-icons/fa';
@@ -21,7 +24,7 @@ import heartIcon from '../img/bitting heart.gif';
 function ChatList() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { messages, isLoading } = useSelector((state) => state.chat);
+  const { messages, isLoading, feedback } = useSelector((state) => state.chat);
   const { onlineUsers } = useSelector((state) => state.onlineUsers);
   const [content, setContent] = useState('');
   const socket = useRef(null);
@@ -35,6 +38,8 @@ function ChatList() {
     if (socket.current === null && user && user.token) {
       // Connect to the server
       socket.current = socketClient(user.token);
+      // Clear feedbacl
+      dispatch(clearFeedback());
       // Get messages
       dispatch(asyncGetMessages(socket.current));
       // Listen for messages List
@@ -69,6 +74,26 @@ function ChatList() {
           toastId: 1,
         });
       });
+      socket.current.on('feedback', (message) => {
+        dispatch(socketGetFeedback(message));
+        setTimeout(() => {
+          dispatch(clearFeedback(message));
+        }, 3000);
+      });
+      document
+        .getElementsByClassName('new-message-input')[0]
+        .addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            document.getElementsByClassName('send-message-button')[0].click();
+          } else
+            dispatch(
+              asyncSendFeedback({
+                socket: socket.current,
+                message: `${user.name} is typing...`,
+              })
+            );
+        });
     }
     return () => {
       if (socket.current) {
@@ -80,7 +105,7 @@ function ChatList() {
 
   useEffect(() => {
     if (!isLoading) chatScrollDown();
-  }, [messages, isLoading]);
+  }, [messages, isLoading, feedback]);
 
   useEffect(() => {
     document.getElementsByTagName('body')[0].classList.add('dark');
@@ -143,6 +168,7 @@ function ChatList() {
             message={message}
           />
         ))}
+        <p className='feedback'>{`${feedback}`}</p>
         {isLoading && <Spinner />}
       </div>
       <form className='form' onSubmit={handleSubmit}>

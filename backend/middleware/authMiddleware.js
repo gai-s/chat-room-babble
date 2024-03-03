@@ -46,6 +46,7 @@ const socketProtect = asyncHandler(async (socket, next) => {
       if (!user) {
         next(new Error('Not authorized'));
       }
+      user.connectionNum = 1;
       socket.user = user;
       next();
     } catch (error) {

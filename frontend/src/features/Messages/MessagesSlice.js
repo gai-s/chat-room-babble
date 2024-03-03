@@ -4,11 +4,13 @@ import {
   createMessage,
   updateMessage,
   deleteMessage,
+  sendFeedback,
 } from './messagesAPI';
 
 const initialState = {
   messages: [],
   message: {},
+  feedback: '',
   errorMessage: '',
   isLoading: false,
 };
@@ -18,6 +20,18 @@ export const asyncGetMessages = createAsyncThunk(
   async (socket, thunkAPI) => {
     try {
       await getMessages(socket);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        (error.response && error.response.message) || error.message
+      );
+    }
+  }
+);
+export const asyncSendFeedback = createAsyncThunk(
+  'messages/sendFeedback',
+  async ({ socket, message }, thunkAPI) => {
+    try {
+      sendFeedback(message, socket);
     } catch (error) {
       return thunkAPI.rejectWithValue(
         (error.response && error.response.message) || error.message
@@ -95,6 +109,14 @@ const messagesSlice = createSlice({
         (message) => message._id !== action.payload
       );
     },
+    socketGetFeedback: (state, action) => {
+      state.feedback = action.payload;
+    },
+    clearFeedback: (state, action) => {
+      if (action.payload && action.payload === state.feedback)
+        state.feedback = '';
+      if (!action.payload) state.feedback = '';
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -140,6 +162,9 @@ const messagesSlice = createSlice({
       .addCase(asyncDeleteMessage.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload;
+      })
+      .addCase(asyncSendFeedback.rejected, (state, action) => {
+        state.errorMessage = action.payload;
       });
   },
 });
@@ -150,5 +175,7 @@ export const {
   socketGetMessage,
   socketUpdateMessage,
   socketDeleteMessage,
+  socketGetFeedback,
+  clearFeedback,
 } = messagesSlice.actions;
 export default messagesSlice.reducer;

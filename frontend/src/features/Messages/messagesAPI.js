@@ -19,3 +19,6 @@ export const updateMessage = async (id, messageData, socket) => {
 export const deleteMessage = async (id, socket) => {
   socket.emit('delete-message', id);
 };
+export const sendFeedback = async (message, socket) => {
+  socket.emit('feedback', message);
+};

@@ -1,10 +1,21 @@
 module.exports = (io, onlineUsers) => {
   const Message = require('../models/messageModel');
   return (socket) => {
-    onlineUsers.set(socket.user._id.toString(), socket.user);
+    if (onlineUsers.get(socket.user._id.toString())) {
+      onlineUsers.set(socket.user._id.toString(), {
+        ...socket.user,
+        connectionNum: socket.user.connectionNum + 1,
+      });
+    } else {
+      onlineUsers.set(socket.user._id.toString(), socket.user);
+    }
     io.emit(
       'online-users',
       [...onlineUsers].map(([name, value]) => value)
+    );
+    socket.broadcast.emit(
+      'feedback',
+      `${socket.user.name} connected to the chat!`
     );
 
     // @desc    Get messages from current time
@@ -13,8 +24,8 @@ module.exports = (io, onlineUsers) => {
     // @access  Private
     socket.on('get-messages', async () => {
       const messages = await Message.find();
-
-      socket.emit('get-messages', messages);
+      if (socket?.user?.isAdmin) socket.emit('get-messages', messages);
+      else socket.emit('get-messages', []);
     });
 
     // @desc    Create new message from user
@@ -122,20 +133,29 @@ module.exports = (io, onlineUsers) => {
     });
     socket.on('disconnect', () => {
       socket.disconnect();
-      onlineUsers.delete(socket.user._id.toString());
-      io.emit(
-        'online-users',
-        [...onlineUsers].map(([name, value]) => value)
-      );
+      if (onlineUsers.get(socket.user._id.toString()).connectionNum > 1) {
+        onlineUsers.set(socket.user._id.toString(), {
+          ...socket.user,
+          connectionNum: socket.user.connectionNum - 1,
+        });
+      } else {
+        onlineUsers.delete(socket.user._id.toString());
+        io.emit(
+          'online-users',
+          [...onlineUsers].map(([name, value]) => value)
+        );
+        socket.broadcast.emit(
+          'feedback',
+          `${socket.user.name} disconnected from the chat!`
+        );
+      }
     });
     socket.on('force-disconnect', () => {
       socket.disconnect();
-      // onlineUsers.delete(socket.user._id);
-      onlineUsers.delete(socket.user._id.toString());
-      io.emit(
-        'online-users',
-        [...onlineUsers].map(([name, value]) => value)
-      );
+      onlineUsers.delete(socket.user._id);
+    });
+    socket.on('feedback', (message) => {
+      socket.broadcast.emit('feedback', message);
     });
   };
 };

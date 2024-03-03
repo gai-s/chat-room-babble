@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   asyncDeleteMessage,
@@ -10,9 +10,9 @@ import moment from 'moment';
 
 function ChatItem({ socket, message }) {
   const dispatch = useDispatch();
-  const { users, user } = useSelector((state) => state.auth);
-  const [editMode, setEditMode] = React.useState(false);
-  const [updatedContent, setUpdatedContent] = React.useState(message.content);
+  const { user } = useSelector((state) => state.auth);
+  const [editMode, setEditMode] = useState(false);
+  const [updatedContent, setUpdatedContent] = useState(message.content);
   const userType = user._id === message.user ? 'self' : 'other';
   const inputRef = useRef(null);
 
@@ -21,7 +21,7 @@ function ChatItem({ socket, message }) {
       setUpdatedContent(message.content);
       inputRef.current.focus();
     }
-  }, [editMode]);
+  }, [editMode, message]);
 
   const deleteMessage = () => {
     if (window.confirm('Are you sure you want to delete this message?')) {
