@@ -15,6 +15,7 @@ function ChatItem({ socket, message }) {
   const [updatedContent, setUpdatedContent] = useState(message.content);
   const userType = user._id === message.user ? 'self' : 'other';
   const inputRef = useRef(null);
+  const itemRef = useRef(null);
 
   useEffect(() => {
     if (editMode === true) {
@@ -39,6 +40,10 @@ function ChatItem({ socket, message }) {
   };
 
   const updateMessage = (updatedContent) => {
+    if (updatedContent === message.content) {
+      setEditMode(false);
+      return;
+    }
     dispatch(
       asyncUpdateMessage({
         socket,
@@ -61,6 +66,12 @@ function ChatItem({ socket, message }) {
   const editModeHandler = () => {
     if (editMode === false) {
       setEditMode(true);
+      document.addEventListener('click', (e) => {
+        if (itemRef.current && !itemRef.current.contains(e.target)) {
+          setEditMode(false);
+          setUpdatedContent(message.content);
+        }
+      });
     } else {
       setEditMode(false);
       setUpdatedContent(message.content);
@@ -83,7 +94,7 @@ function ChatItem({ socket, message }) {
           backgroundImage: message.gravatarUrl && `url(${message.gravatarUrl}`,
         }}
       ></div>
-      <div className={`list-item ${userType}-content`}>
+      <div className={`list-item ${userType}-content`} ref={itemRef}>
         {userType === 'self' && (
           <div className='list-item-change-buttons'>
             <button

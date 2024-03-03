@@ -1,11 +1,10 @@
 module.exports = (io, onlineUsers) => {
   const Message = require('../models/messageModel');
   return (socket) => {
-    if (onlineUsers.get(socket.user._id.toString())) {
-      onlineUsers.set(socket.user._id.toString(), {
-        ...socket.user,
-        connectionNum: socket.user.connectionNum + 1,
-      });
+    const existedUser = onlineUsers.get(socket.user._id.toString());
+    if (existedUser) {
+      existedUser.connectionNum = existedUser.connectionNum + 1;
+      onlineUsers.set(socket.user._id.toString(), existedUser);
     } else {
       onlineUsers.set(socket.user._id.toString(), socket.user);
     }
@@ -132,12 +131,10 @@ module.exports = (io, onlineUsers) => {
       `Users connections count: ${io.engine.clientsCount}`;
     });
     socket.on('disconnect', () => {
-      socket.disconnect();
-      if (onlineUsers.get(socket.user._id.toString()).connectionNum > 1) {
-        onlineUsers.set(socket.user._id.toString(), {
-          ...socket.user,
-          connectionNum: socket.user.connectionNum - 1,
-        });
+      const existedUser = onlineUsers.get(socket.user._id.toString());
+      if (existedUser.connectionNum > 1) {
+        existedUser.connectionNum--;
+        onlineUsers.set(socket.user._id.toString(), existedUser);
       } else {
         onlineUsers.delete(socket.user._id.toString());
         io.emit(
@@ -149,6 +146,7 @@ module.exports = (io, onlineUsers) => {
           `${socket.user.name} disconnected from the chat!`
         );
       }
+      socket.disconnect();
     });
     socket.on('force-disconnect', () => {
       socket.disconnect();
