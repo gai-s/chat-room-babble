@@ -20,6 +20,8 @@ import { FaUser } from 'react-icons/fa';
 import Spinner from '../components/Spinner';
 import sendIcon from '../img/send-icon.png';
 import heartIcon from '../img/bitting heart.gif';
+import BackgroundSong from '../img/Gregory-Alan-Isakov-Words.mp3';
+import RadioImg from '../img/radio-image.png';
 
 function ChatList() {
   const dispatch = useDispatch();
@@ -27,8 +29,10 @@ function ChatList() {
   const { messages, isLoading, feedback } = useSelector((state) => state.chat);
   const { onlineUsers } = useSelector((state) => state.onlineUsers);
   const [content, setContent] = useState('');
+  const [radionOnOff, setRadionOnOff] = useState(false);
   const socket = useRef(null);
   const chatListRef = useRef(null);
+  const audioElement = useRef(new Audio(BackgroundSong));
 
   const chatScrollDown = () => {
     chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
@@ -128,37 +132,54 @@ function ChatList() {
     }
   };
 
+  const handleRadioClick = async (on) => {
+    if (!on) {
+      await audioElement.current.play();
+    } else {
+      await audioElement.current.pause();
+    }
+    setRadionOnOff(!on);
+  };
+
   return (
     <div className='chat-list-page'>
-      <div className='stats'>
-        <input type='checkbox' />
-        <div className='online-users-count'>
-          <FaUser /> {onlineUsers.length}
-        </div>
-        {onlineUsers && (
-          <div className='online-users-list'>
-            <div className='headline'>
-              <h3>Who is in here ?</h3>
-              <div>
-                <img src={heartIcon} className='icon' alt='' />
-              </div>
-            </div>
-            <ul>
-              {onlineUsers.map((user) => (
-                <li key={user._id}>
-                  <div
-                    className={`online-users-avatar`}
-                    style={{
-                      backgroundImage:
-                        user.gravatarUrl && `url(${user.gravatarUrl}`,
-                    }}
-                  ></div>
-                  <p>{user.name}</p>
-                </li>
-              ))}
-            </ul>
+      <div className='info'>
+        <div className='stats'>
+          <input type='checkbox' />
+          <div className='online-users-count'>
+            <FaUser /> {onlineUsers.length}
           </div>
-        )}
+          {onlineUsers && (
+            <div className='online-users-list'>
+              <div className='headline'>
+                <h3>Who is in here ?</h3>
+                <div>
+                  <img src={heartIcon} className='icon' alt='' />
+                </div>
+              </div>
+              <ul>
+                {onlineUsers.map((user) => (
+                  <li key={user._id}>
+                    <div
+                      className={`online-users-avatar`}
+                      style={{
+                        backgroundImage:
+                          user.gravatarUrl && `url(${user.gravatarUrl}`,
+                      }}
+                    ></div>
+                    <p>{user.name}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+        <div
+          className={`radio ${!radionOnOff && 'mid-opacity'}`}
+          onClick={() => handleRadioClick(radionOnOff)}
+        >
+          <img src={RadioImg} alt='Click for sound' />
+        </div>
       </div>
       <div className='list-items' ref={chatListRef}>
         {messages.map((message) => (
