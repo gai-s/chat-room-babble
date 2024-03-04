@@ -160,6 +160,7 @@ form {
 .btn-transperent {
   background: none;
   border: none;
+  outline: none;
   color: inherit;
   width: 50px;
 }
@@ -179,17 +180,13 @@ form {
   font-size: 13px;
 }
 
-.btn:hover {
-  transform: scale(0.98);
-}
-
 // Babble chat Room App pages
 .babble-chat-room-app {
   /* scrollbar */
   @-moz-document url-prefix() {
     @supports (scrollbar-color: blue red) {
       * {
-        scrollbar-color: #2c5a66 rgba(#fff, 0.1);
+        scrollbar-color: $primary-color rgba(#fff, 0.1);
         scrollbar-width: thin;
       }
     }
