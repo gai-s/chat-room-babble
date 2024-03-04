@@ -12,6 +12,7 @@ module.exports = (io, onlineUsers) => {
       'online-users',
       [...onlineUsers].map(([name, value]) => value)
     );
+    socket.emit('feedback', 'welcome to Babble Chat Room');
     socket.broadcast.emit(
       'feedback',
       `${socket.user.name} connected to the chat!`

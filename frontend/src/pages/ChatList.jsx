@@ -98,6 +98,9 @@ function ChatList() {
               })
             );
         });
+      audioElement.current.onpause = function () {
+        setRadionOnOff(false);
+      };
     }
     return () => {
       if (socket.current) {
@@ -175,7 +178,7 @@ function ChatList() {
           )}
         </div>
         <div
-          className={`radio ${!radionOnOff && 'mid-opacity'}`}
+          className={`radio ${!radionOnOff ? 'mid-opacity' : 'radio-on'}`}
           onClick={() => handleRadioClick(radionOnOff)}
         >
           <img src={RadioImg} alt='Click for sound' />
