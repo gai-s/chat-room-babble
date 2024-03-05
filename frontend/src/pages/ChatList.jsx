@@ -32,7 +32,7 @@ function ChatList() {
   const [radionOnOff, setRadionOnOff] = useState(false);
   const socket = useRef(null);
   const chatListRef = useRef(null);
-  const audioElement = useRef(new Audio(BackgroundSong));
+  const audioElement = useRef(null);
 
   const chatScrollDown = () => {
     chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
@@ -98,9 +98,6 @@ function ChatList() {
               })
             );
         });
-      audioElement.current.onpause = function () {
-        setRadionOnOff(false);
-      };
     }
     return () => {
       if (socket.current) {
@@ -136,6 +133,12 @@ function ChatList() {
   };
 
   const handleRadioClick = async (on) => {
+    if (audioElement.current === null) {
+      audioElement.current = new Audio(BackgroundSong);
+      audioElement.current.onpause = function () {
+        setRadionOnOff(false);
+      };
+    }
     if (!on) {
       await audioElement.current.play();
     } else {
