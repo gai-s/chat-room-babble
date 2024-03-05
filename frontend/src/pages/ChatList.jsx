@@ -105,7 +105,7 @@ function ChatList() {
         socket.current = null;
       }
     };
-  }, [user, unsetIsLoading]);
+  }, [user, dispatch]);
 
   useEffect(() => {
     if (!isLoading) chatScrollDown();
@@ -159,8 +159,8 @@ function ChatList() {
             <div className='online-users-list'>
               <div className='headline'>
                 <h3>Who is in here ?</h3>
-                <div>
-                  <img src={heartIcon} className='icon' alt='' />
+                <div className='icon'>
+                  <img src={heartIcon} alt='' />
                 </div>
               </div>
               <ul>

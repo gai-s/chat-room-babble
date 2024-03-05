@@ -95,23 +95,25 @@ function ChatItem({ socket, message }) {
         }}
       ></div>
       <div className={`list-item ${userType}-content`} ref={itemRef}>
-        {userType === 'self' && (
-          <div className='list-item-change-buttons'>
-            <button
-              className='delete btn btn-transperent'
-              onClick={deleteMessage}
-            >
-              <FaTrash size={20} />
-            </button>
-            <button
-              className='edit btn btn-transperent'
-              onClick={editModeHandler}
-            >
-              <FaPen />
-            </button>
-          </div>
-        )}
-        <h3>{message.userName}</h3>
+        <div className='list-item-header'>
+          <h3>{message.userName}</h3>
+          {userType === 'self' && (
+            <div className='list-item-change-buttons'>
+              <button
+                className='delete btn btn-transperent'
+                onClick={deleteMessage}
+              >
+                <FaTrash size={15} />
+              </button>
+              <button
+                className='edit btn btn-transperent'
+                onClick={editModeHandler}
+              >
+                <FaPen size={15} />
+              </button>
+            </div>
+          )}
+        </div>
         <p className='time'>{calculateTime(message.createdAt)}</p>
         {editMode ? (
           <div className='edit-mode'>
@@ -128,7 +130,7 @@ function ChatItem({ socket, message }) {
             </div>
             <div className='form-group list-item-edit-buttons'>
               <button
-                className='btn'
+                className='btn edit-save-btn'
                 onClick={() => updateMessage(updatedContent)}
               >
                 <FaCheckCircle />
@@ -142,8 +144,8 @@ function ChatItem({ socket, message }) {
           </div>
         ) : (
           <div className='form-group'>
-            <p style={{ whiteSpace: 'pre-line' }}>
-              {message.content}{' '}
+            <p style={{ whiteSpace: 'pre-line' }} className='chat-item-content'>
+              {message.content}
               {message?.edited && (
                 <span className='edited-icon'>
                   <FaExclamation color='red' />

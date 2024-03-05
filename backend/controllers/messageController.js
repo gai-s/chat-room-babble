@@ -87,7 +87,7 @@ module.exports = (io, onlineUsers) => {
         socket.emit('errorEvent', new Error('Message Not found'));
       }
 
-      if (message.user.toString() !== socket.user.id) {
+      if (!message?.user || message.user.toString() !== socket.user.id) {
         socket.emit('errorEvent', new Error('Not Autorized'));
       }
       data.edited = true;
@@ -117,7 +117,7 @@ module.exports = (io, onlineUsers) => {
       if (!message) {
         socket.emit('errorEvent', new Error('Message Not found'));
       }
-      if (message.user.toString() !== socket.user.id) {
+      if (!message?.user || message.user.toString() !== socket.user.id) {
         socket.emit('errorEvent', new Error('Not Autorized'));
       }
 
