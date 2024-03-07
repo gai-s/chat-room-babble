@@ -94,7 +94,7 @@ const getUsers = asyncHandler(async (req, res) => {
   return res.status(200).json(users);
 });
 
-const getMe = asyncHandler(async (req, res) => {
+const getUser = asyncHandler(async (req, res) => {
   const user = {
     // id: req.user._id,
     // name: req.user.name,
@@ -102,6 +102,29 @@ const getMe = asyncHandler(async (req, res) => {
     // createdAt: req.user.createdAt,
   };
   res.status(200).json(user);
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+  if (!req.params.id) {
+    res.status(400);
+    throw new Error('Please include all fields');
+  }
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  } else if (!req.user.isAdmin && user.id.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error('Not Autorized');
+  } else {
+    try {
+      await User.findByIdAndDelete(req.params.id);
+      res.json({ message: 'User removed' });
+    } catch (error) {
+      res.status(400);
+      throw new Error(`Something went wrong: ${error.message}`);
+    }
+  }
 });
 
 const generateToken = (id) => {
@@ -128,4 +151,4 @@ const hasGravatarCheck = async (email) => {
   }
 };
 
-module.exports = { registerUser, loginUser, getMe };
+module.exports = { registerUser, loginUser, getUser, deleteUser };

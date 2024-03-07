@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node backend/server.js",
+    "test": "concurrently \"npm run server\" \"jest\"",
+    "testwatch": "concurrently \"npm run server\" \"jest --watchAll\"",
     "server": "nodemon backend/server.js",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
@@ -28,6 +30,7 @@
     "socket.io": "^4.7.4"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "^3.0.3"
   }
 }
