@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node backend/server.js",
-    "test": "concurrently \"npm run server\" \"jest\"",
-    "testwatch": "concurrently \"npm run server\" \"jest --watchAll\"",
+    "testwatch": "jest --watchAll",
     "server": "nodemon backend/server.js",
+    "test": "concurrently \"npm run server\" \"npm run testwatch\"",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
