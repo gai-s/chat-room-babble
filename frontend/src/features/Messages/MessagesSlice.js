@@ -110,7 +110,7 @@ const messagesSlice = createSlice({
       );
     },
     socketGetFeedback: (state, action) => {
-      state.feedback = action.payload;
+      if (state.feedback !== action.payload) state.feedback = action.payload;
     },
     clearFeedback: (state, action) => {
       if (action.payload && action.payload === state.feedback)

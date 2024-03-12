@@ -33,6 +33,7 @@ function ChatList() {
   const socket = useRef(null);
   const chatListRef = useRef(null);
   const audioElement = useRef(null);
+  const timeOutRef = useRef(null);
 
   const chatScrollDown = () => {
     chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
@@ -80,7 +81,8 @@ function ChatList() {
       });
       socket.current.on('feedback', (message) => {
         dispatch(socketGetFeedback(message));
-        setTimeout(() => {
+        if (timeOutRef.current) clearTimeout(timeOutRef.current);
+        timeOutRef.current = setTimeout(() => {
           dispatch(clearFeedback(message));
         }, 3000);
       });
