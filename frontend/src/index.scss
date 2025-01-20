@@ -9,14 +9,17 @@ $secondary-color: rgba(#2c5a66, 0.5);
 }
 
 body {
+  background-image: url('./img/chatBackground6.jpg');
+  background-size: cover;
+  background-position-y: top;
   font-family: 'Poppins', sans-serif;
   height: 100vh;
   height: 100svh;
   overflow-y: hidden;
 }
 body.dark {
-  background-image: url('./img/chatBackground.jpg');
-  background-size: contain;
+  background-image: url('./img/latenightbackground.jpg');
+  background-size: cover;
   background-position-y: top;
 }
 
@@ -549,7 +552,21 @@ form {
   .Toastify__toast-container {
     width: 85vw !important;
   }
-  .dark {
+  body {
+    background-image: url('./img/chatBackground5.jpg');
+  }
+  body.dark {
+    background-image: url('./img/latenightbackgroundsmall.jpg');
     background-size: cover !important;
+    background-position-y: bottom;
+    .header {
+      a {
+        color: #a9a9a9;
+        text-shadow: 1px 1px 0.2px black, 0 0 3em #a9a9a9, 0 0 3em #a9a9a9;
+      }
+    }
+    .babble-chat-room-app .chat-list-page .list-items .feedback {
+      background-color: rgba(#eee, 0.3);
+    }
   }
 }

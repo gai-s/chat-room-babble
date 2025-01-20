@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { socketClient } from '../features/socketClient';
 import { toast } from 'react-toastify';
 import ChatItem from '../components/ChatItem';
@@ -16,6 +17,7 @@ import {
   clearFeedback,
 } from '../features/Messages/MessagesSlice';
 import { socketGetOnlineUsers } from '../features/OnlineUsers/OnlineUsersSlice';
+import { logout } from '../features/Auth/authSlice';
 import { FaUser } from 'react-icons/fa';
 import Spinner from '../components/Spinner';
 import sendIcon from '../img/send-icon.png';
@@ -25,6 +27,7 @@ import RadioImg from '../img/radio-image.png';
 
 function ChatList() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const { messages, isLoading, feedback } = useSelector((state) => state.chat);
   const { onlineUsers } = useSelector((state) => state.onlineUsers);
@@ -78,6 +81,8 @@ function ChatList() {
         toast.error(error.message, {
           toastId: 1,
         });
+        dispatch(logout());
+        navigate('/');
       });
       socket.current.on('feedback', (message) => {
         dispatch(socketGetFeedback(message));
