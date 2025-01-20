@@ -10,11 +10,11 @@ const initialState = {
   message: '',
 };
 
-// The function below is called a thunk and allows us to perform async logic. It
+// Async requests - The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched. Thunks are
-// typically used to make async requests.
+// code can then be executed and other actions can be dispatched.
+
 export const registerAsync = createAsyncThunk(
   'auth/registerUser',
   async (user, { rejectWithValue }) => {
@@ -24,11 +24,7 @@ export const registerAsync = createAsyncThunk(
       return response.data;
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        error.response?.data?.message || error.message || error.toString();
       return rejectWithValue(message);
     }
   }
@@ -43,28 +39,11 @@ export const loginAsync = createAsyncThunk(
       return response.data;
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+        error.response?.data?.message || error.message || error.toString();
       return rejectWithValue(message);
     }
   }
 );
-
-// export const getUsersAsync = createAsyncThunk(
-//   'auth/getUsers',
-//   async (user, thunkAPI) => {
-//     try {
-//       const token = thunkAPI.getState().auth.user.token;
-//       const response = await getUsers(token);
-//       return response.data;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
 
 export const logout = createAction('auth/logout', () => {
   window.localStorage.removeItem(key);

@@ -103,6 +103,11 @@ form {
   border-radius: 5px;
   font-family: inherit;
   outline: none;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.form-group input::placeholder {
+  color: #3b494c;
 }
 
 .form-group label {
@@ -340,6 +345,11 @@ form {
         font-size: 0.8rem;
         opacity: 0.75;
       }
+      .edited-icon {
+        padding-left: 1em;
+        font-size: 10px !important;
+        color: rgba(#f20017, 0.7);
+      }
       .list-item-header {
         display: flex;
         justify-content: space-between;
@@ -558,7 +568,6 @@ form {
   body.dark {
     background-image: url('./img/latenightbackgroundsmall.jpg');
     background-size: cover !important;
-    background-position-y: bottom;
     .header {
       a {
         color: #a9a9a9;

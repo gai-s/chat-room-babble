@@ -89,7 +89,7 @@ function ChatList() {
         if (timeOutRef.current) clearTimeout(timeOutRef.current);
         timeOutRef.current = setTimeout(() => {
           dispatch(clearFeedback(message));
-        }, 3000);
+        }, 1000);
       });
       document
         .getElementsByClassName('new-message-input')[0]

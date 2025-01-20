@@ -80,9 +80,12 @@ function ChatItem({ socket, message }) {
 
   const calculateTime = (timeString) => {
     let time = moment(timeString);
-    if (moment().diff(time, 'minute') > 60) {
+    if (moment().diff(time, 'second') >= 60) {
       return time.format('MMM D, h:mm a');
     }
+    setTimeout(() => {
+      setUpdatedContent(...message.content);
+    }, 60000);
     return time.fromNow();
   };
 
@@ -148,7 +151,9 @@ function ChatItem({ socket, message }) {
               {message.content}
               {message?.edited && (
                 <span className='edited-icon'>
-                  <FaExclamation color='red' />
+                  {' '}
+                  edited
+                  <FaExclamation />
                 </span>
               )}
             </p>

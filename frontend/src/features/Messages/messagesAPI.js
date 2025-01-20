@@ -1,7 +1,5 @@
-// A mock function to mimic making an async request for data
-
 export const getMessages = async (socket) => {
-  return await socket.emit('get-messages');
+  socket.emit('get-messages');
 };
 
 export const getMessage = async (id, socket) => {
