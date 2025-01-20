@@ -112,7 +112,7 @@ function ChatList() {
         socket.current = null;
       }
     };
-  }, [user, dispatch]);
+  }, [user, dispatch, navigate]);
 
   useEffect(() => {
     if (!isLoading) chatScrollDown();
