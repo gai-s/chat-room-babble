@@ -13,19 +13,18 @@ Demonstrates frontend skills with React and real-time communication using WebSoc
 
 ## Technologies
 React, Redux, Node.js, Express, Socket.io, JWT, md-5 & Gravatar API, CSS Modules
-Unit testing: Jest, Mocha, Chai, Sinon
+Unit testing: Jest
 
 ## How to Run
 1. Clone the repository
 2. Run `npm install`
-3. Run `npm start`
+3. Run `npm run dev`
 
 ## Demo / Screenshots
 Deployment using Render: https://chat-room-babble.onrender.com
 (Please wait few seconds for server to reload - Render deploy)
 
-## Challenges & Learning
-- Managing complex state in real-time communication
-- Connecting backend and frontend efficiently
-- Optimizing user experience for live chat
+*There is vanilla JS version of this application for learning porpuses in 'babble' repository - https://github.com/gai-s/babble
+
+<img width="414" height="896" alt="image" src="https://github.com/user-attachments/assets/ce821ed1-751d-4447-8ae1-e645e2dba444" />
 
